@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>AI Assistant component (beta)</title>
+    <!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
+    <!-- ArcGIS Maps SDK for JavaScripst imports -->
+    <script type="module" src="https://js.arcgis.com/5.0"></script>
+    <script type="module">
+      async function initialize() {
+        const [OAuthInfo, esriId] = await $arcgis.import([
+          '@arcgis/core/identity/OAuthInfo.js',
+          '@arcgis/core/identity/IdentityManager.js',
+        ]);
+        // Create a new OAuthInfo object.
+        // The OAuth sign-in page will be shown in a popup window and use the specified callback URL.
+        const info = new OAuthInfo({
+          appId: 'NHTZ33Cww1YLcE9d',
+          popup: false,
+        });
+        // Add this OAuthInfo object to the IdentityManager.
+        esriId.registerOAuthInfos([info]);
+      }
+      initialize();
+    </script>
+  </head>
+
+  <style></style>
+
+  <body>
+    <calcite-shell>
+      <calcite-navigation slot="header">
+        <calcite-navigation-logo
+          slot="logo"
+          icon="effects"
+          heading="ArcGIS Assistants Web Components"
+        ></calcite-navigation-logo>
+      </calcite-navigation>
+      <calcite-shell-panel slot="panel-start" width="m" id="map-utils-panel">
+        <calcite-panel heading="Map Utilities">
+          <calcite-block open>
+            <arcgis-layer-list reference-element="my-map"></arcgis-layer-list>
+          </calcite-block>
+          <calcite-block collapsible>
+            <arcgis-legend reference-element="my-map"></arcgis-legend>
+          </calcite-block>
+        </calcite-panel>
+      </calcite-shell-panel>
+
+      <arcgis-map
+        id="my-map"
+        item-id="97e1813a3c6a4c728f5ae7f4b62cd967"
+      ></arcgis-map>
+
+      <calcite-shell-panel slot="panel-end" width="l" id="assistant-panel">
+        <arcgis-assistant
+          log-enabled
+          copy-enabled
+          reference-element="my-map"
+          heading="Traffic Signs Assistant"
+          description="Ask questions about the traffic signs in Utrecht (NL) and
+          get answers in natural language."
+        >
+          <arcgis-assistant-navigation-agent></arcgis-assistant-navigation-agent>
+          <arcgis-assistant-data-exploration-agent></arcgis-assistant-data-exploration-agent>
+          <arcgis-assistant-help-agent></arcgis-assistant-help-agent>
+        </arcgis-assistant>
+      </calcite-shell-panel>
+    </calcite-shell>
+    <script type="module">
+      const assistantElement = document.querySelector('arcgis-assistant');
+      const mapElement = document.querySelector('arcgis-map');
+      assistantElement.suggestedPrompts = [
+        'Show me all traffic signs in the neighborhood of Overvecht.',
+        'Show me all traffic signs in an area of 100 meters around the Graadt van Roggenweg',
+        'How many traffic signs are there in total?',
+      ];
+    </script>
+  </body>
+</html>
